@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>...</title>
+</head>
+<body style="background:#0e0e10;color:#999;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;padding:24px">
+<div id="msg">Завантаження…</div>
+<script>
+// window.location.hash дописується до цільового URL навмисно — саме туди
+// Telegram кладе tgWebAppData (initData) при відкритті Mini App-кнопки; без
+// цього автентифікація користувача на реальному бекенді зламається.
+fetch("current.json?t=" + Date.now(), { cache: "no-store" })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+        if (data && data.url) {
+            window.location.replace(data.url + window.location.hash);
+        } else {
+            document.getElementById("msg").textContent = "Застосунок зараз офлайн — спробуй трохи пізніше.";
+        }
+    })
+    .catch(function () {
+        document.getElementById("msg").textContent = "Застосунок зараз офлайн — спробуй трохи пізніше.";
+    });
+</script>
+</body>
+</html>
